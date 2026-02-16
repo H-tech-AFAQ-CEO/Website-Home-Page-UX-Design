@@ -108,6 +108,50 @@
             box-shadow: var(--shadow-sm);
         }
 
+        /* Animated top border line */
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--primary) 20%, 
+                var(--gradient-1) 50%, 
+                var(--gradient-2) 80%, 
+                transparent 100%);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .header.scrolled::after {
+            transform: scaleX(1);
+        }
+
+        /* Animated shimmer effect */
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.8) 50%, 
+                transparent 100%);
+            transition: left 1.5s ease-in-out;
+            border-radius: 0 0 3px 3px;
+        }
+
+        .header.scrolled::before {
+            left: 100%;
+        }
+
         .logo {
             display: flex;
             align-items: center;
@@ -437,36 +481,220 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        /* Killer Steps Layout */
+        .steps-container {
+            position: relative;
+            padding: 3rem 0;
+            overflow: hidden;
+        }
+
+        .steps-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            gap: 2rem;
+        }
+
+        .step-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 3;
+            flex: 1;
         }
 
         .step {
-            background: white;
-            padding: 2.5rem 1.5rem;
-            border-radius: 28px;
-            border: 1px solid var(--gray-100);
-            transition: 0.2s;
-            box-shadow: var(--shadow-sm);
-            text-align: center;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            padding: 3rem 2rem;
+            border-radius: 32px;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(93, 95, 239, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--primary), var(--gradient-1));
+            border-radius: 30px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(93, 95, 239, 0.03), rgba(139, 92, 246, 0.03));
+            border-radius: 30px;
+            z-index: -2;
         }
 
         .step:hover {
-            transform: translateY(-10px);
-            border-color: rgba(93, 95, 239, 0.2);
-            box-shadow: var(--shadow-xl);
+            transform: translateY(-12px) scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(93, 95, 239, 0.2);
+            background: linear-gradient(145deg, #ffffff, #ffffff);
+        }
+
+        .step:hover::before {
+            opacity: 1;
         }
 
         .step-num {
-            background: var(--gray-50);
-            width: 64px;
-            height: 64px;
-            border-radius: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--gradient-2));
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 900;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 2rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 15px 30px rgba(93, 95, 239, 0.4);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .step:hover .step-num {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(93, 95, 239, 0.5);
+        }
+
+        .step h3 {
+            font-size: 1.4rem;
             font-weight: 800;
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin: 0 auto 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary), var(--gradient-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .step p {
+            font-size: 1rem;
+            color: var(--gray-600);
+            line-height: 1.7;
+            transition: color 0.3s ease;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .step:hover h3,
+        .step:hover p {
+            color: var(--gray-900);
+        }
+
+        /* Flowing Connection Lines */
+        .connection-line {
+            position: absolute;
+            top: 50%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--primary) 0%, 
+                var(--gradient-1) 50%, 
+                var(--gradient-2) 100%);
+            z-index: 1;
+            transform-origin: left center;
+            border-radius: 2px;
+        }
+
+        .line-1 {
+            left: 16.66%;
+            width: 16.66%;
+            animation: flowLine1 2s ease-out 0.5s both;
+        }
+
+        .line-2 {
+            left: 50%;
+            width: 16.66%;
+            animation: flowLine2 2s ease-out 1s both;
+        }
+
+        .line-3 {
+            left: 83.33%;
+            width: 16.66%;
+            animation: flowLine3 2s ease-out 1.5s both;
+        }
+
+        /* Animated Dots */
+        .flow-dot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .dot-1 {
+            right: -12px;
+            background: var(--gradient-2);
+            animation: pulseFlow 2s infinite 1s;
+        }
+
+        .dot-2 {
+            right: -12px;
+            background: var(--gradient-1);
+            animation: pulseFlow 2s infinite 1.5s;
+        }
+
+        .dot-3 {
+            right: -12px;
+            background: var(--primary);
+            animation: pulseFlow 2s infinite 2s;
+        }
+
+        @keyframes flowLine1 {
+            0% { transform: scaleX(0); opacity: 0; }
+            50% { transform: scaleX(0.5); opacity: 0.7; }
+            100% { transform: scaleX(1); opacity: 1; }
+        }
+
+        @keyframes flowLine2 {
+            0% { transform: scaleX(0); opacity: 0; }
+            50% { transform: scaleX(0.5); opacity: 0.7; }
+            100% { transform: scaleX(1); opacity: 1; }
+        }
+
+        @keyframes flowLine3 {
+            0% { transform: scaleX(0); opacity: 0; }
+            50% { transform: scaleX(0.5); opacity: 0.7; }
+            100% { transform: scaleX(1); opacity: 1; }
+        }
+
+        @keyframes pulseFlow {
+            0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+            50% { transform: translateY(-50%) scale(1.3); opacity: 0.8; }
         }
 
         .features-grid {
@@ -756,26 +984,36 @@
                 <h2 style="font-size:2.5rem; font-weight:800;">Find a counselor you like</h2>
                 <p style="color: var(--gray-500);">with the experience you need</p>
             </div>
-            <div class="steps-grid">
-                <div class="step">
-                    <div class="step-num">1</div>
-                    <h3>Browse & search</h3>
-                    <p style="color:gray;">Explore using filters and keywords.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">2</div>
-                    <h3>Get in touch</h3>
-                    <p style="color:gray;">Reach out and discuss your goals.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <h3>Place your order</h3>
-                    <p style="color:gray;">Choose a package or request a custom offer.</p>
-                </div>
-                <div class="step">
-                    <div class="step-num">4</div>
-                    <h3>Review & approve</h3>
-                    <p style="color:gray;">Share feedback with the community.</p>
+            <div class="steps-container">
+                <div class="steps-flow">
+                    <div class="step-wrapper">
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <h3>Browse & search</h3>
+                            <p>Explore using filters and keywords.</p>
+                        </div>
+                    </div>
+                    <div class="step-wrapper">
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <h3>Get in touch</h3>
+                            <p>Reach out and discuss your goals.</p>
+                        </div>
+                    </div>
+                    <div class="step-wrapper">
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <h3>Place your order</h3>
+                            <p>Choose a package or request a custom offer.</p>
+                        </div>
+                    </div>
+                    <div class="step-wrapper">
+                        <div class="step">
+                            <div class="step-num">4</div>
+                            <h3>Review & approve</h3>
+                            <p>Share feedback with the community.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
